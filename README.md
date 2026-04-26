@@ -1,38 +1,230 @@
-## e-SIAKAD
-MODEL SAAS SIAKAD
+# 🚀 Laravel Module Maker Commands
 
-## Learning Laravel
+Custom Artisan Commands untuk mempercepat development menggunakan struktur **Module** (seperti `nwidart/laravel-modules`) di Laravel 10–13.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+Tool ini dibuat untuk developer yang ingin bekerja lebih **cepat, rapi, dan minim error**.
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+---
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+## 📋 Requirements
 
-## Agentic Development
+- PHP >= 8.1  
+- Laravel 10 / 11 / 12 / 13  
+- Struktur modular (`Modules/`)
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+### 📦 Packages
+
+- `nwidart/laravel-modules` → Module management  
+- `spatie/laravel-permission` → Role & permission  
+- `stancl/tenancy` *(optional)* → Multi-tenant  
+- `Laravel UI / Breeze` → Authentication  
+
+---
+
+## ✨ Features
+
+### 🟢 `module:make-view` (Generate)
+
+Generate semua kebutuhan CRUD hanya dengan **1 command**:
+
+#### ✅ Migration
+- Nama class = nama file (**anti error redeclare**)  
+- Support singular & plural otomatis  
+- Primary key: **UUID**
+
+#### ✅ Model
+- Menggunakan PHP Attributes (`#[Fillable]`)  
+- Include `HasUuids`  
+- `$table` otomatis terisi  
+
+#### ✅ Controller
+- Full CRUD:
+  - `index`
+  - `create`
+  - `store`
+  - `show`
+  - `edit`
+  - `update`
+  - `destroy`  
+- View path otomatis lowercase (`module::view`)  
+- Validasi & redirect siap pakai  
+
+#### ✅ Views
+Auto-generate:
+- `index`
+- `create`
+- `edit`
+- `show`
+
+Template: **Bootstrap 5**
+
+#### ✅ Route
+- Auto tambah `use Controller`  
+- Menggunakan style modern (`Controller::class`)  
+- Route lama tetap aman  
+
+---
+
+### 🔴 `module:make-delete` (Cleanup)
+
+Menghapus module secara **bersih total**:
+
+- 🗑️ Migration  
+- 🗑️ Model  
+- 🗑️ Controller  
+- 🗑️ Folder views  
+- 🗑️ Baris route + `use` di `web.php`  
+
+---
+
+## 🛠️ Installation
+
+### 1. Copy Command Files
+
+Letakkan di:
 
 ```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+app/Console/Commands/
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+Pastikan terdapat:
+- `MakeViewCommand.php`
+- `MakeDeleteCommand.php`
 
-## Contributing
+---
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### 2. Permission (Optional)
 
-## Code of Conduct
+```bash
+chmod +x app/Console/Commands/*.php
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+---
 
-## Security Vulnerabilities
+### 3. Update Autoload
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+```bash
+composer dump-autoload
+```
 
-## License
+---
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## 📖 Usage
+
+### 1️⃣ Generate Module
+
+```bash
+php artisan module:make-view {Module} {Fitur} {Kolom...}
+```
+
+#### Contoh:
+
+```bash
+php artisan module:make-view Dosen kelas nama ruangan
+php artisan module:make-view Dosen jadwal hari jam ruangan
+php artisan module:make-view Akademik matkul nama sks
+```
+
+---
+
+### 📌 Hasil Route (`web.php`)
+
+```php
+use Modules\Dosen\Http\Controllers\KelasController;
+use Illuminate\Support\Facades\Route;
+
+Route::resource('kelas', KelasController::class)->names('kelas');
+```
+
+---
+
+### 📌 Hasil Controller
+
+```php
+return view('dosen::kelas.index', compact('data'));
+```
+
+---
+
+### 2️⃣ Delete Module
+
+```bash
+php artisan module:make-delete {Module} {Fitur}
+```
+
+#### Contoh:
+
+```bash
+php artisan module:make-delete Dosen kelas
+```
+
+Konfirmasi:
+- Ketik `yes` atau tekan **Enter**
+
+---
+
+## ⚠️ Important
+
+Setelah delete module, wajib jalankan:
+
+```bash
+composer dump-autoload
+```
+
+---
+
+## 🐛 Troubleshooting
+
+### ❌ Class does not exist
+
+```bash
+composer dump-autoload
+```
+
+---
+
+### ❌ No hint path defined for [Module]
+
+```php
+view('dosen::kelas.index') // ✅ BENAR
+view('Dosen::kelas.index') // ❌ SALAH
+```
+
+---
+
+### ❌ Cannot redeclare class
+
+✔ Sudah diperbaiki:
+- Nama class migration selalu sama dengan nama file
+
+---
+
+## 📂 Generated Structure
+
+```bash
+Modules/
+└── Dosen/
+    ├── app/
+    │   ├── Http/Controllers/KelasController.php
+    │   └── Models/Kelas.php
+    ├── Database/Migrations/
+    │   └── create_kelas_table.php
+    ├── Resources/views/kelas/
+    │   ├── index.blade.php
+    │   ├── create.blade.php
+    │   ├── edit.blade.php
+    │   └── show.blade.php
+    └── Routes/web.php
+```
+
+---
+
+## 👨‍💻 Author
+
+- GitHub: [@faizincwds](https://github.com/faizincwds)
+
+---
+
+## 📄 License
+
+MIT License — bebas digunakan untuk kebutuhan pribadi maupun komersial.
