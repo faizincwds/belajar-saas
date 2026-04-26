@@ -1,0 +1,52 @@
+Kategori	Nama Package	Composer Install Command	Deskripsi / Kegunaan	Status
+⚙️ CORE SYSTEM
+Laravel Breeze		Sistem Login/Register ringan & mudah diedit.	✅ Wajib
+nwidart/laravel-modules		Membagi sistem jadi modul-modul terpisah. Struktur rapi.	✅ Wajib
+spatie/laravel-permission		Mengelola Hak Akses (Roles & Permissions).	✅ Wajib
+stancl/tenancy		Wajib SaaS! Memisahkan database/data tiap client.	✅ Wajib
+🔌 API UNTUK ANDROID
+laravel/sanctum		WAJIB! Autentikasi aman untuk akses dari Aplikasi Android/Mobile.	✅ Wajib
+🔐 KEAMANAN & PERFORMANCE
+spatie/laravel-responsecache		Mempercepat loading website secara drastis.	✅ Wajib
+fruitcake/laravel-cors		Mengizinkan akses API dari luar (Android/Frontend).	✅ Wajib
+biscolab/laravel-recaptcha		Proteksi form dari Bot/Spam.	✅ Recommended
+Rate Limiter	- (Sudah ada)	Batasan request agar aman dari serangan.	✅ Wajib
+📅 PENGATURAN SISTEM
+spatie/laravel-settings		Menyimpan pengaturan aplikasi di database.	✅ Wajib
+📨 NOTIFIKASI
+laravel/notifications	Sudah ada	Sistem kirim notifikasi Email/DB.	✅ Wajib
+💳 PAYMENT & FINANCE
+Xendit		Payment Gateway Lokal.	✅ Pilih 1
+Midtrans		Payment Gateway Lokal.	✅ Pilih 1
+riskihajar/terbilang		Mengubah angka jadi huruf rupiah.	✅ Wajib
+🚀 UPDATE & MAINTENANCE
+spatie/laravel-updater		Update sistem otomatis via panel.	✅ Wajib
+spatie/laravel-backup		Backup database & file otomatis.	✅ Wajib
+spatie/laravel-activitylog		Catat semua aktivitas user di database.	✅ Wajib
+spatie/laravel-schedule-monitor		Pantau jadwal otomatis (Cron Job).	✅ Wajib
+🛡️ MONITORING ERROR (OPEN SOURCE)
+arcanedev/log-viewer		Lihat log error lewat website. Tidak butuh DB.	✅ Wajib
+oplu/error-tracker		Simpan error detail ke database.	✅ Recommended
+🧰 UTILITY & TOOLS
+spatie/laravel-medialibrary		Mengelola upload file & gambar.	✅ Wajib
+barryvdh/laravel-dompdf	DIHAPUS	Diganti pakai jsPDF (Client Side via CDN).	❌ Dihapus
+maatwebsite/excel		Import & Export data Excel.	✅ Wajib
+spatie/laravel-query-builder		Filter data API dengan mudah.	✅ Recommended
+yajra/laravel-datatables		WAJIB! Tabel interaktif (Search, Sort, Pagination).	✅ Wajib
+🎨 TEMPLATE & UI
+blade-ui-kit/blade-ui-kit		Komponen siap pakai (Button, Form, Card, Alert).	✅ Recommended
+laravelcollective/html		Memudahkan pembuatan Form & HTML.	✅ Recommended
+📊 CHART & VISUALISASI
+arielmejiadev/larapex-charts		Membuat grafik/chart cantik.	✅ Recommended
+🌐 MULTI LANGUAGE / BAHASA
+spatie/laravel-translatable		Menerjemahkan ISI DATA di Database.	✅ Wajib
+arielmejiadev/locale-languages		Mengelola terjemahan TAMPILAN lewat Panel.	✅ Recommended
+🧩 HELPER LAINNYA
+spatie/laravel-sluggable		Auto buat URL SEO Friendly & Unik.	✅ Recommended
+spatie/laravel-sitemap		Auto generate sitemap.	✅ Recommended
+spatie/laravel-string		Manipulasi teks.	✅ Recommended
+⚡ DEVELOPER TOOLS
+laravel/telescope		Debug detail saat development.	✅ Dev Only
+laravel/pint		Rapikan format kode otomatis.	✅ Dev Only
+nunomaduro/larastan		Cek error kode sebelum jalan.	✅ Dev Only
+blueprint/blueprint		Generate kode otomatis.	✅ Dev Only
