@@ -8,16 +8,82 @@ Tool ini dibuat untuk developer yang ingin bekerja lebih **cepat, rapi, dan mini
 
 ## 📋 Requirements
 
-- PHP >= 8.1  
-- Laravel 10 / 11 / 12 / 13  
+- PHP >= 8.5
+- Laravel 13  
 - Struktur modular (`Modules/`)
 
-### 📦 Packages
+### 📦 Daftar Package Terinstall
 
-- `nwidart/laravel-modules` → Module management  
-- `spatie/laravel-permission` → Role & permission  
-- `stancl/tenancy` *(optional)* → Multi-tenant  
-- `Laravel UI / Breeze` → Authentication  
+### 🔐 Security & Form
+| Package | Fungsi | Status |
+| :--- | :--- | :--- |
+| `anhskohbo/no-captcha` | Proteksi form dengan Google ReCAPTCHA | ✅ DONE |
+
+---
+
+### 📊 Data & Report
+| Package | Fungsi | Status |
+| :--- | :--- | :--- |
+| `avadim/fast-excel-laravel` | Export & Import file Excel | ✅ DONE |
+| `barryvdh/laravel-dompdf` | Generate file PDF | ✅ DONE |
+| `arielmejiadev/larapex-charts` | Membuat grafik & chart interaktif | ✅ DONE |
+
+---
+
+### 🏗️ Core System & Architecture
+| Package | Fungsi | Status |
+| :--- | :--- | :--- |
+| `nwidart/laravel-modules` | Sistem modular (terpisah per folder) | ✅ DONE |
+| `stancl/tenancy` | Fitur Multi-Tenant / Multi-Company (SaaS) | ✅ DONE |
+| `laravel/sentinel` | Autentikasi & keamanan tambahan | ✅ DONE |
+
+---
+
+### 🛡️ Spatie Packages
+| Package | Fungsi | Status |
+| :--- | :--- | :--- |
+| `spatie/laravel-activitylog` | Mencatat log aktivitas user | ✅ DONE |
+| `spatie/laravel-backup` | Backup database & file otomatis | ✅ DONE |
+| `spatie/laravel-html` | Helper pembuatan form & elemen HTML | ✅ DONE |
+| `spatie/laravel-medialibrary` | Manajemen upload file & gambar | ✅ DONE |
+| `spatie/laravel-permission` | Pengaturan Role & Hak Akses User | ✅ DONE |
+| `spatie/laravel-query-builder` | Filter data API & tabel dengan mudah | ✅ DONE |
+| `spatie/laravel-responsecache` | Cache respon agar website cepat | ✅ DONE |
+| `spatie/laravel-schedule-monitor` | Monitoring jadwal proses otomatis | ✅ DONE |
+| `spatie/laravel-settings` | Menyimpan pengaturan sistem ke database | ✅ DONE |
+| `spatie/laravel-sitemap` | Generate sitemap.xml untuk SEO | ✅ DONE |
+
+---
+
+### 🛠️ Development Tools
+| Package | Fungsi | Status |
+| :--- | :--- | :--- |
+| `laravel/telescope` | Debug & melihat log request/query | ✅ DONE |
+| `laravel/tinker` | Interaksi sistem via command line | ✅ DONE |
+| `laravel/pail` | Melihat log sistem secara realtime | ✅ DONE |
+| `pestphp/pest-plugin-laravel` | Tools testing kode aplikasi | ✅ DONE |
+
+---
+
+## ❌ Catatan Package yang Diskip
+
+- **`spatie/laravel-updater`** ➡️ *SKIP* (Belum ada versi yang support Laravel 13).
+- **`spatie/laravel-string`** ➡️ *SKIP* (Sudah digantikan helper `Str::` bawaan).
+- **`sentry/sentry-laravel`** ➡️ *REMOVED* (Tidak menggunakan layanan pihak ketiga).
+
+---
+
+## 📝 Cara Update Modul
+
+Karena tidak pakai auto-updater, cara update modul adalah:
+
+### 1️⃣ Via Command Line
+```bash
+# Refresh daftar modul
+php artisan module:refresh
+
+# Update database modul tertentu
+php artisan module:migrate NamaModul
 
 ---
 
