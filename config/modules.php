@@ -185,7 +185,7 @@ return [
             'seeder' => ['path' => 'database/seeders', 'generate' => true],
 
             // lang/
-            'lang' => ['path' => 'lang', 'generate' => false],
+            'lang' => ['path' => 'lang', 'generate' => true],
 
             // resource/
             'assets' => ['path' => 'resources/assets', 'generate' => true],
@@ -231,7 +231,7 @@ return [
         | This option for register lang file automatically.
         |
         */
-        'translations' => false,
+        'translations' => true,
 
     ],
 

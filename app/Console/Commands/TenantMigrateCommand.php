@@ -26,7 +26,7 @@ class TenantMigrateCommand extends Command
         }
 
         foreach ($tenants as $tenant) {
-            $this->line("👉 Tenant: {$tenant->name}");
+            $this->line("👉 Tenants: {$tenant->name}");
 
             // 🔥 Validasi data tenant
             if (!isset($tenant->data['db_path'])) {
@@ -50,18 +50,19 @@ class TenantMigrateCommand extends Command
 
                 Artisan::call('migrate:fresh', [
                     '--database' => 'tenant',
-                    '--path' => '/database/migrations/tenant',
+                    '--path' => '/database/migrations/Tenants',
                     '--force' => true,
                 ]);
             } else {
                 Artisan::call('migrate', [
                     '--database' => 'tenant',
-                    '--path' => '/database/migrations/tenant',
+                    '--path' => '/database/migrations/Tenants',
                     '--force' => true,
                 ]);
             }
 
             $this->info("✔️ Selesai: {$tenant->name}");
+            $this->info("✔️ Path: {$tenant->data['db_path']}");
             $this->line("---------------------------------");
         }
 

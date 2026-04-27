@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Str;
 
 #[Signature('tenant:create {name} {domain}')]
-#[Description('Create new tenant with database')]
+#[Description('Create new Tenants with database')]
 class CreateTenantCommand extends Command
 {
     public function handle(): int
@@ -28,11 +28,11 @@ class CreateTenantCommand extends Command
         $dbName = 'tenant_' . Str::slug($name);
 
         // 🔥 Path SQLite
-        $dbPath = database_path("tenants/{$dbName}.sqlite");
+        $dbPath = database_path("Tenants/{$dbName}.sqlite");
 
         // 🔥 Buat folder jika belum ada
-        if (!file_exists(database_path('tenants'))) {
-            mkdir(database_path('tenants'), 0777, true);
+        if (!file_exists(database_path('Tenants'))) {
+            mkdir(database_path('Tenants'), 0777, true);
         }
 
         // 🔥 Buat file database
@@ -63,7 +63,7 @@ class CreateTenantCommand extends Command
         // 🔥 Jalankan migration ke DB tenant
         Artisan::call('migrate', [
             '--database' => 'tenant',
-            '--path' => '/database/migrations/tenant', // penting
+            '--path' => '/database/migrations/Tenants', // penting
             '--force' => true,
         ]);
 
@@ -73,6 +73,7 @@ class CreateTenantCommand extends Command
         $this->line("Nama     : {$tenant->name}");
         $this->line("Domain   : {$tenant->domain}");
         $this->line("DB       : {$dbName}.sqlite");
+        $this->line("Lokasi   : {$dbPath}");
         $this->info("=================================");
 
         return self::SUCCESS;
