@@ -3,7 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Database\Factories\UserFactory;
+// use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -17,7 +17,7 @@ use Stancl\Tenancy\Database\Concerns\BelongsToTenant;
 class User extends Authenticatable
 {
     /** @use HasFactory<UserFactory> */
-    use HasFactory, use HasUuids, BelongsToTenant, HasRoles, Notifiable;
+    use HasFactory, HasUuids, BelongsToTenant, Notifiable;
 
     /**
      * Get the attributes that should be cast.

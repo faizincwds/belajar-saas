@@ -3,13 +3,14 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use Stancl\Tenancy\Database\Concerns\BelongsToTenant;
 
 class Tenant extends Model
 {
-    use HasUuids, BelongsToTenant;
+    use HasFactory,BelongsToTenant, HasUuids;
 
     protected $fillable = [
         'id',
