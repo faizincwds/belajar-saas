@@ -2,83 +2,50 @@
 
 namespace App\Console\Commands;
 
-use App\Models\Tenant;
 use Illuminate\Console\Attributes\Description;
 use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 
-#[Signature('tenant:create {name} {domain} {fields?*}')]
-#[Description('Create Tenant + DB + Migration + Seeder Global')]
-class CreateTenantCommand extends Command
+#[Signature('module:create-tenant {module} {table} {fields?*}')]
+#[Description('Create Migration & Seeder for Tenant inside specific Module')]
+class ModuleCreateTenantCommand extends Command
 {
     public function handle(): int
     {
-        $name = $name = $this->argument('name');
-        $domain = $this->argument('domain');
+        $moduleName = $this->argument('module');
+        $tableInput = $this->argument('table');
         $fields = $this->argument('fields') ?? [];
 
-        // 🔒 Validasi domain
-        if (Tenant::where('domain', $domain)->exists()) {
-            $this->error('❌ Domain sudah digunakan!');
-            return self::FAILURE;
-        }
-
-        // 🔥 Generate DB name
-        $dbName = 'tenant_' . Str::slug($name);
-        $dbPath = database_path("Tenants/{$dbName}.sqlite");
-
-        // 🔥 Buat folder DB jika belum ada
-        if (!File::isDirectory(dirname($dbPath))) {
-            File::makeDirectory(dirname($dbPath), 0777, true);
-        }
-
-        // 🔥 Buat file database
-        if (!file_exists($dbPath)) {
-            File::put($dbPath, '');
-        }
-
-        // 🔥 Simpan ke DB utama
-        $tenant = Tenant::create([
-            'id' => (string) Str::uuid(),
-            'name' => $name,
-            'domain' => $domain,
-            'data' => [
-                'db' => $dbName,
-                'db_path' => $dbPath,
-            ],
-        ]);
-
-        $this->info("=================================");
-        $this->info("✅ TENANT BERHASIL DIBUAT");
-        $this->line("Nama   : {$tenant->name}");
-        $this->line("Domain : {$tenant->domain}");
-        $this->line("DB     : {$dbName}.sqlite");
-        $this->info("=================================");
-
-        // =============================================
-        // 📝 BUAT MIGRATION & SEEDER
-        // =============================================
-        $tableName = Str::snake(Str::plural(Str::slug($name)));
+        $tableName = Str::snake(Str::plural($tableInput));
         $migrationName = 'create_' . $tableName . '_table';
         $seederName = ucfirst(Str::camel($tableName)) . 'Seeder';
 
-        $this->newLine();
-        $this->info("⚡ GENERATING FILES...");
+        $this->info("=================================");
+        $this->info("⚡ GENERATING FOR MODULE: {$moduleName}");
+        $this->info("=================================");
 
-        // 📂 1. Buat Folder dulu
-        $migrationsPath = database_path('migrations/Tenants');
-        $seedersPath = database_path('seeders/Tenants');
+        // 📂 Path Lokasi (Sesuai Nama Module)
+        $modulePath = base_path("Modules/{$moduleName}");
+        $migrationsPath = "{$modulePath}/Database/Migrations/Tenants";
+        $seedersPath = "{$modulePath}/Database/Seeders/Tenants";
 
+        // Cek Module ada atau tidak
+        if (!File::isDirectory($modulePath)) {
+            $this->error("❌ Module {$moduleName} tidak ditemukan!");
+            return self::FAILURE;
+        }
+
+        // 📂 1. Buat Folder jika belum ada
         if (!File::isDirectory($migrationsPath)) {
             File::makeDirectory($migrationsPath, 0777, true);
-            $this->line("📂 Created: database/migrations/Tenants");
+            $this->line("📂 Created: Modules/{$moduleName}/Database/Migrations/Tenants");
         }
 
         if (!File::isDirectory($seedersPath)) {
             File::makeDirectory($seedersPath, 0777, true);
-            $this->line("📂 Created: database/seeders/Tenants");
+            $this->line("📂 Created: Modules/{$moduleName}/Database/Seeders/Tenants");
         }
 
         // 📄 2. Buat Migration
@@ -86,7 +53,7 @@ class CreateTenantCommand extends Command
         $migrationFullPath = "{$migrationsPath}/{$migrationFile}";
 
         if (!File::exists($migrationFullPath)) {
-            // 🔥 JIKA FIELDS KOSONG, DEFAULT CUMA ID & TIMESTAMPS
+            // 🔥 Logic Fields
             if (empty($fields)) {
                 $fieldsString = "// Default only ID & Timestamps";
             } else {
@@ -121,19 +88,19 @@ return new class extends Migration
 };
 PHP;
             File::put($migrationFullPath, $migrationCode);
-            $this->line("✅ Created: database/migrations/Tenants/{$migrationFile}");
+            $this->line("✅ Created: Modules/{$moduleName}/Database/Migrations/Tenants/{$migrationFile}");
         }
 
         // 📄 3. Buat Seeder
         $seederFullPath = "{$seedersPath}/{$seederName}.php";
 
         if (!File::exists($seederFullPath)) {
-            // 🔥 JIKA FIELDS KOSONG, CUMA INSERT ID
+            // 🔥 Logic Seeder
             if (empty($fields)) {
                 $seederCode = <<<PHP
 <?php
 
-namespace Database\Seeders\Tenants;
+namespace Modules\\{$moduleName}\\Database\Seeders\Tenants;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -161,7 +128,7 @@ PHP;
                 $seederCode = <<<PHP
 <?php
 
-namespace Database\Seeders\Tenants;
+namespace Modules\\{$moduleName}\\Database\Seeders\Tenants;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -190,15 +157,15 @@ PHP;
             }
 
             File::put($seederFullPath, $seederCode);
-            $this->line("✅ Created: database/seeders/Tenants/{$seederName}.php");
+            $this->line("✅ Created: Modules/{$moduleName}/Database/Seeders/Tenants/{$seederName}.php");
         }
 
         $this->newLine();
-        $this->info("📝 CARA PAKAI SELANJUTNYA");
-        $this->line("php artisan tenant:migrate {$domain}");
-        $this->line("php artisan tenant:seed {$domain} {$seederName}");
-
+        $this->info("📝 CARA PAKAI");
+        $this->line("php artisan tenant:migrate");
+        $this->line("php artisan tenant:seed NamaModule {$seederName}");
         $this->info("=================================");
+
         return self::SUCCESS;
     }
 }
