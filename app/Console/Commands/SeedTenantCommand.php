@@ -9,7 +9,7 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\File;
 
-#[Signature('tenant:seed {domain} {class?}')]
+#[Signature('tenant:seed {domain?} {class?}')]
 #[Description('Run specific seeder class for tenant')]
 class SeedTenantCommand extends Command
 {

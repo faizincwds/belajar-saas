@@ -55,6 +55,7 @@ class MigrateTenantCommand extends Command
             $this->line("---------------------------------");
 
         } else {
+            
             // 🌐 Jalankan untuk SEMUA tenant
             $tenants = Tenant::all();
 

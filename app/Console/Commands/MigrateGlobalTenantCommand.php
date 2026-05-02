@@ -17,7 +17,7 @@ class MigrateGlobalTenantCommand extends Command
     {
         $namaTabel = $this->argument('namatabel');
 
-        // 🔍 Cari semua tenant
+        // 🔍 Cari semua tenant di DB tenant model
         $tenants = Tenant::all();
         if ($tenants->isEmpty()) {
             $this->warn("⚠️ Belum ada tenant yang terdaftar.");
